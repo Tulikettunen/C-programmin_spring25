@@ -1,1 +1,25 @@
+Write a program that:
+1. Asks user to enter the price of a bus ticket
+2. Asks user to enter the price of a taxi trip
+3. Asks user to enter how much money he/she has
+4. If user has not enough money for either type tells user to walk and then the program stops
+5. Asks user to choose taxi or bus (use numbers for selection)
+6. Checks if user has enough money for the selected trip type
+    o If User has enough money reduce the money by the selected trip’s price and print
+      how much money is left, and go back to step 4
+    o If user has not enough money for the selected trip type then tell that to user and go
+      back to step 4
 
+
+
+/*
+int main()
+{
+    char name[25];    //char merkki, ja array, 25 on varattujen merkkien määrä koska se pitää varat erikseen
+    printf("Hello world\n");
+    printf("please tell me your name:\n");
+    scanf("%s", &name);
+    printf("Welcome to C programming %s", name);
+    return 0;
+}
+*/
