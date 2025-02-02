@@ -59,3 +59,29 @@ int main(void)
     heitä_d20();
     return 0;
 }
+
+
+
+/*Miksi tämä koodipätkä ei toiminut?
+ Sama juttu kun nykyisessä tomivassa versiossa, toteutettava funktio ja terminaalin virhesyötteen tyhjennys väärinpäin?
+ Niin kauan kuin joku oikea syöte, koodi kuitenkin toimi, nimenomaan (numero)virhesyötteiden kohdalla ongelmia.
+ *            switch(choice) {
+                case 1:
+                    roll_d6();
+                    while(getchar() != '\n');
+                    break;
+                case 2:
+                    roll_d20();
+                    while(getchar() != '\n');
+                    break;
+                case 3:
+                    ton = 0;
+                    while(getchar() != '\n');
+                    break;
+                case 4:
+                    printf("Syötäthän vain numeroita! Valitse 1 Menussa esitetyistä vaihtoehdoista.\n");
+                    break;
+                default:
+                    printf("Syöttämänne valinta ei ole kelvollinen, valitse 1 Menussa esitetyistä vaihtoehdoista.\n");
+                    while (getchar() != 'n');
+                    break; */
