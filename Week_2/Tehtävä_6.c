@@ -17,7 +17,18 @@ int print_menu(){
 }
 
 int roll_d6(){
+    printf("Heität D6 noppaa!\n");
+    /*srand(time(NULL)); // use current time as seed for random generator
+    int random_variable = rand();
+    printf("Random value on [0,%d]: %d\n", 7, random_variable);
+     */
 
+    return 0;
+}
+
+int roll_d20(){
+    printf("Heität d20 noppaa!\n");
+    return 0;
 }
 
 int main(void){
@@ -25,13 +36,30 @@ int main(void){
     int choice;
     while(ton == 1){
         print_menu();
-        scanf("%d", &choice);
-
-
-        srand(time(NULL)); // use current time as seed for random generator
-        int random_variable = rand();
-        printf("Random value on [0,%d]: %d\n", 7, random_variable);
-
+        if (scanf("%d", &choice) != 1) {
+            printf("Syötäthän vain numeroita! Valitse 1 Menussa esitetyistä vaihtoehdoista.\n");
+            while(getchar() != '\n');
+        }
+        else{
+            switch(choice) {
+                case 1:
+                    roll_d6();
+                    while(getchar() != '\n');
+                    break;
+                case 2:
+                    roll_d20();
+                    while(getchar() != '\n');
+                    break;
+                case 3:
+                    ton = 0;
+                    while(getchar() != '\n');
+                    break;
+                default:
+                    printf("Syöttämänne valinta ei ole kelvollinen, valitse 1 Menussa esitetyistä vaihtoehdoista.\n");
+                    while (getchar() != 'n');
+                    break;
+            }
+        }
     }
-    return 0
+    return 0;
 }
