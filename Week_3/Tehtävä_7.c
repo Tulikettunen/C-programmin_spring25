@@ -41,7 +41,7 @@ int main(){
 			truefalse = 0;		//lopeta ohjelma
 		}
 		else if (read_positive(pos_point) == false){
-		    count += 1;
+		    count += 1;     //menee tänne jos virhe syöte, ja laskee virhesyötteitä
 		}
 		else{
 			arvauspeli(pos_no);
