@@ -31,8 +31,16 @@ bool binary_reader(unsigned int *pu);
 int digit_counter(unsigned int nr);
 
 //
+bool binary_reader(unsigned int *pu){
+    bool tof = false;
+    char wtf = readline(
 
+    return tof;
+}
 
+int digit_counter(unsigned int nr){
+
+}
 
 //
 int main(int arcg, char **argv)

@@ -1,0 +1,32 @@
+Airline seat manager
+
+Write a program for managing seats in an airplane. The airplane has 26 rows with six seats on each
+row. The seats are marked with letters A to F so that:
+    • A and F are by window
+    • C and D are by the aisle
+    • B and E are in the middle
+
+The program stores seat reservations in a CSV-file where each row contains information about one
+seat:
+    • First name
+    • Last name
+    • Row number
+    • Seat (A-F)
+
+The program must have at least the following functionality:
+    • Reserve a seat:
+        o Enter name of the passenger, row and seat
+        o Print error message if seat is already taken
+        o Add the reservation to the end of the file
+    • Print the seat map of the airplane
+        o On the left the row number
+        o All seats so that aisle is printed as three spaces
+        o Free seats are printed with an uppercase letter
+        o Reserved seats are printed with a lower-case letter ‘x’.
+
+        For example:
+            1 ABx DEF
+            2 ABC DEF
+            3 xxC xxF
+
+    • Print a list of passengers sorted by last name and first name
