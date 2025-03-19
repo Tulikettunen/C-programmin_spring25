@@ -19,7 +19,7 @@ void print_passengers();
 void sort_first();
 void sort_last();
 
-int input_handling();
+int input_handling(int *input, int range);
 
 //Functions:
 int input_handling(int *input, int range){
@@ -42,15 +42,15 @@ int main(){
 
         switch (input_handling(*selected, MAIN_OPTS)) {
         case 1:
-            printf("reserve seat case 1 valittu");
+            printf("reserve seat case 1 valittu\n");
             //reserve_seat();
             break;
         case 2:
-            printf("print seatmap case 2 valittu");
+            printf("print seatmap case 2 valittu\n");
             //print_seatmap();
             break;
         case 3:
-            printf("print passangers case 3 valittu");
+            printf("print passangers case 3 valittu\n");
             //print_passangers();
             break;
         case 4:
