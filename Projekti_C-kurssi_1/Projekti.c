@@ -90,10 +90,12 @@ void read_csv(aPassenger *passengers) {
 }
 
 void print_passengers(aPassenger *passengers) {
+    int opt;
+    int *opti = &opt;
     read_csv(passengers);
 
-    int opt;
-    switch (input_handling(opt, PRINT_PAS_OPTS)) {       //valitaan kumman nimen mukaan lajitellaan
+    printf("Choose 1 to sort by first name, 2 to sort by last name:\n");
+    switch (input_handling(opti, PRINT_PAS_OPTS)) {       //valitaan kumman nimen mukaan lajitellaan
         case 1:
             printf("case 1 valittu, lajitellaan etunimen mukaan\n");
             //sort_first(passengers);
@@ -192,7 +194,7 @@ int main(){
             break;
         case 3:
             printf("print passangers case 3 valittu\n");
-            //print_passangers(passengers);
+            print_passengers(passengers);
             break;
         case 4:
             printf("You have chosen to exit the program.\n"
