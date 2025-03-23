@@ -44,8 +44,10 @@ int input_handling(int *input, int range);  // Tehty ja toimii
 int input_handling(int *input, int range){
     int holder;
     char wrongchr;     // Tää tekee nyt sen pahuksen "bugin" korjauksen, jossa syöte "3dfgdr" hyväksytään, koska siinä on ensin 3. Jessss!! :D
-    while( (scanf("%d%c", &holder, &wrongchr) == 0 ) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
-        while(getchar() != '\n');
+    while( (scanf("%d%c", &holder, &wrongchr) != 2 ) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
+        if (wrongchr != '\n') {
+            while(getchar() != '\n');
+        }
         printf("Invalid user input, please read the instructions and try again \n");
     }
     *input = holder;
