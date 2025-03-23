@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include <string.h>
+//#include <CLionProjects\C-programmin_spring25\Projekti_C-kurssi_1\csv_seat_reservations.csv>
 
 #define MAIN_OPTS 4
 #define PRINT_PAS_OPTS 2
@@ -53,25 +54,26 @@ int input_handling(int *input, int range){
 
 void read_csv(aPassenger *passengers) {
     FILE *csv_seats;
-    csv_seats = fopen("csv_seat_reservations", "r");
+    csv_seats = fopen("csv_seat_reservations.csv", "r");
 
     if(csv_seats == NULL) {     //error handling
         printf("Unable to open requested file.\n");
     }
     else {
-        printf("file was successfully opened");
+        printf("file was successfully opened\n");
     }
 
     int read = 0;
     int rows = 0;
     do {        //reads the file info into a list of structs, passed to function as a pointer
         read = fscanf(csv_seats,
-                    "%FIRSTNL[^,],%LASTNL[^,],%d,%c\n",
+                    "%19[^,],%39[^,],%d,%c\n",
                     passengers[rows].firstn,
                     passengers[rows].lastn,
                     &passengers[rows].row,
                     &passengers[rows].seat);
         if (read == 4) rows++;
+        //printf("Read %d values\n", read);  //debugging line
 
         if (read == LINES && !feof(csv_seats)) {         //more error handling
             printf("Something is off with the file.\n");
@@ -80,6 +82,7 @@ void read_csv(aPassenger *passengers) {
             printf("There was an error when reading file.\n");
         }
     } while (!feof(csv_seats));
+    printf("read_csv() funktion finnished\n"); //debugging line
 
     fclose(csv_seats);
 }
@@ -122,19 +125,28 @@ void print_seatmap(aPassenger *passengers) {
 
     for (int i = 0; i < LINES; i++) {       //käy läpi kaikki rivit tiedostosta
         char var = passengers[i].seat;
-        if (var == 'A') {       //printataan rivejä: jos istuin on a, tulostaa rivinvaihdon, ja sen jälkeen rivinumeron
-            printf("\n%d", passengers[i].row);
+        if (var == 'A') {
+            //printataan rivejä: jos istuin on a, tulostaa rivinvaihdon, ja sen jälkeen rivinumeron
+            printf("\n%-*d", 4,passengers[i].row);
             if (strcmp(passengers[i].firstn, "free") != 0) {        //printataan istuimia: tarkistaa onko paikka vapaa, jos ei, lisää x
-                printf("x");
-            }
-            else if (var == 'C') {      //tarkistaa onko paikka C, jos on, lisää tulostukseen välilyönnit käytävää varten
-                printf("%c   ", passengers[i].seat);
+                printf("%s", "x");
             }
             else {  //jos paikka on vapaa, kirjoittaa istuimen kirjaimen
                 printf("%c", passengers[i].seat);
             }
         }
+        else if (var == 'C') {      //tarkistaa onko paikka C, jos on, lisää tulostukseen välilyönnit käytävää varten
+            if (strcmp(passengers[i].firstn, "free") != 0) {
+                //printataan istuimia: tarkistaa onko paikka vapaa, jos ei, lisää x
+                printf("x   ");
+            }
+            else{printf("%c   ", passengers[i].seat);}
+        }
+        else {  //jos paikka on vapaa, kirjoittaa istuimen kirjaimen
+            printf("%c", passengers[i].seat);
+        }
     }
+    printf("\n\n");
 }
 
 
