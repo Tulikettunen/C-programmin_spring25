@@ -24,23 +24,26 @@ int input_handling(int *input, int range);
 //Functions:
 int input_handling(int *input, int range){
     int holder;
-    while( (scanf("%d", &holder) != 1) && (holder < 1) && (holder > range) ){
+    while( (scanf("%d", &holder) != 1) || (holder < 1) || (holder > range) ){
         while(getchar() != '\n');
         printf("Invalid user input, please read the instructions and try again \n");
     }
+    while(getchar() != '\n');
     *input = holder;
     return holder;
 }
+
 
 
 //Main program:
 int main(){
     bool ton = true;
     while (ton){
-        int selected;
+        int select;
+        int * selected = &select;
         printf("Ohjeet valitsemiseen \n");
 
-        switch (input_handling(*selected, MAIN_OPTS)) {
+        switch (input_handling(selected, MAIN_OPTS)) {
         case 1:
             printf("reserve seat case 1 valittu\n");
             //reserve_seat();
@@ -58,6 +61,8 @@ int main(){
                 "Thank you for visiting us and welcome to start great trips with Airline Seatmanager again!\n");
             ton = false;
             break;
+        default:
+             printf("Something unexpected went wrong, please try again.");
         }
     }
     return 0;
