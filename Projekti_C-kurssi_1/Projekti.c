@@ -135,28 +135,10 @@ void print_seatmap(aPassenger *passengers) {
             }
         }
     }
-
-
-
-    char buffer[40];
-    int count = 0;
-    char seats[10] = "ABCDEF";
-
-    for (int i = 0; i < ROWS; i++) {
-        seats[10] = "ABCDEF";
-
-        for (int s = 0; s < 6; s++) {
-            if (strcmp(passengers[count].firstn, "free") != 0) {
-                char seats[s]= "x";
-                sprintf(buffer,"%d, %.3s   %.3s\n", i, seats, seats + 3);
-            }
-            count++;
-        }
-
-    }
 }
 
-void create_csv() {
+
+void create_csv(){
     FILE *csv_seats = fopen("csv_seat_reservations.csv", "w");
 
     if (csv_seats == NULL) {    //error message just in case
@@ -192,7 +174,7 @@ int main(){
             break;
         case 2:
             printf("print seatmap case 2 valittu\n");
-            //print_seatmap(passengers);
+            print_seatmap(passengers);
             break;
         case 3:
             printf("print passangers case 3 valittu\n");
