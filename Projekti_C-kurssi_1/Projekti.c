@@ -2,13 +2,18 @@
 // Created by tuuli on 19/03/2025.
 //
 
-//Declarations:
+
+//INCLUDES:
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
 #include <string.h>
-//#include <CLionProjects\C-programmin_spring25\Projekti_C-kurssi_1\csv_seat_reservations.csv>
+#include <ctype.h>
+
+//
+//DECLARATIONS:
+//
 
 #define MAIN_OPTS 4
 #define PRINT_PAS_OPTS 2
@@ -25,34 +30,53 @@ typedef struct {
 }aPassenger;
 
 
-
+//
 //FUNCTION DECLARATIONS:
+//
+
 void create_csv();
-void read_csv();
-void reserve_seat();
-void print_seatmap();
-void print_passengers();
-void sort_first();
-void sort_last();
-
+void read_csv(aPassenger *passengers);
 int input_handling(int *input, int range);  // Tehty ja toimii
+char cinput_handling(char *input);
+void print_passengers(aPassenger *passengers);
+void print_seatmap(aPassenger *passengers);
+// tähän asti tehty ja toimii
+
+void reserve_seat();        //Kesken
+
+int compare_first(const void *a, const void *b);
+int compare_last(const void *a, const void *b);
+
+void sort_first();      //Tekemättä
+void sort_last();       //Tekemättä
 
 
 
-
+//
 //FUNCTIONS:
-int input_handling(int *input, int range){
-    int holder;
-    char wrongchr;     // Tää tekee nyt sen pahuksen "bugin" korjauksen, jossa syöte "3dfgdr" hyväksytään, koska siinä on ensin 3. Jessss!! :D
-    while( (scanf("%d%c", &holder, &wrongchr) != 2 ) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
-        if (wrongchr != '\n') {
-            while(getchar() != '\n');
-        }
-        printf("Invalid user input, please read the instructions and try again \n");
+//
+
+
+
+
+void create_csv(){
+    FILE *csv_seats = fopen("csv_seat_reservations.csv", "w");
+
+    if (csv_seats == NULL) {    //error message just in case
+        printf("Error opening file!\n");
     }
-    *input = holder;
-    return holder;
+
+    //create rows 1-26 with loop
+    for (int row = 1; row <= 26; row++) {
+        //create seat letters A-F with loop
+        for (char seat = 'A'; seat <= 'F'; seat++) {
+            fprintf(csv_seats, "free,free,%d,%c\n", row, seat);
+        }
+    }
+    fclose(csv_seats);
+    printf("CSV file 'seating_chart.csv' has been created successfully.\n");
 }
+
 
 void read_csv(aPassenger *passengers) {
     FILE *csv_seats;
@@ -88,6 +112,36 @@ void read_csv(aPassenger *passengers) {
 
     fclose(csv_seats);
 }
+
+
+int input_handling(int *input, int range){
+    int holder;
+    char wrongchr;     // Tää tekee nyt sen pahuksen "bugin" korjauksen, jossa syöte "3dfgdr" hyväksytään, koska siinä on ensin 3. Jessss!! :D
+    while( (scanf("%d%c", &holder, &wrongchr) != 2 ) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
+        if (wrongchr != '\n') {
+            while(getchar() != '\n');
+        }
+        printf("Invalid user input, please read the instructions and try again \n");
+    }
+    toupper(holder);
+    *input = holder;
+    return holder;
+}
+
+
+char cinput_handling(char *input) {
+    char holder;
+    char wrongchr;
+    while( (scanf("%c%c", &holder, &wrongchr) != 2 ) || (toupper(holder) < 'A') || (toupper(holder) > 'B') || (wrongchr != '\n') ){
+        if (wrongchr != '\n') {
+            while(getchar() != '\n');
+        }
+        printf("Invalid user input, please read the instructions and try again \n");
+    }
+    *input = holder;
+    return holder;
+}
+
 
 void print_passengers(aPassenger *passengers) {
     int opt;
@@ -154,25 +208,85 @@ void print_seatmap(aPassenger *passengers) {
 }
 
 
-void create_csv(){
-    FILE *csv_seats = fopen("csv_seat_reservations.csv", "w");
+void reserve_seat(aPassenger *passengers) {
+    read_csv(passengers);//opening and updating the saved array of structs and closing it from read mode
 
-    if (csv_seats == NULL) {    //error message just in case
-        printf("Error opening file!\n");
-    }
+    //Modifying the stuff init (through the saved array of structs)
 
-    //create rows 1-26 with loop
-    for (int row = 1; row <= 26; row++) {
-        //create seat letters A-F with loop
-        for (char seat = 'A'; seat <= 'F'; seat++) {
-            fprintf(csv_seats, "free,free,%d,%c\n", row, seat);
+    int chooserow, moreseats;
+    char chooseseat;
+    char * pchooseseat = &chooseseat;
+    int * pchooserow = &chooserow;
+    int * pmoreseats = &moreseats;
+    bool ton = true;       //(TrueOrNot)
+    while (ton) {
+        printf("choose the line you want your seat from (1-%d\n)", ROWS);
+        input_handling(pchooserow, ROWS);
+        printf("Choose a seat A-F:\n");
+        cinput_handling(pchooseseat);
+
+        for (int i = 0; i < ROWS; i++) {    //Looking for the correct line
+            if ( (passengers[i].row == chooserow) && (passengers[i].seat == chooseseat) ) {
+                if (strcmp(passengers[i].firstn, "free") == 0){
+                    printf("Seat is free. Please give us your name (Firstname,Lastname)\n");
+                    passengers[i].firstn[0] = scanf("%19[^,]");
+                    passengers[i].lastn[0] = scanf("%39[^\n]");
+                    while (getchar() != '\n');
+                }
+                else {
+                    printf("Seat you wished for is taken, please pick another one,\n");
+                }
+            }
+        }
+        printf("Do you wish to continue reservation? (1 if yes,2 if no)\n");
+        if (input_handling(pmoreseats, 2) ==2) {
+            ton = false;
         }
     }
-    fclose(csv_seats);
-    printf("CSV file 'seating_chart.csv' has been created successfully.\n");
+
+    //Rewriting modified list to .csv file
+    FILE *csv_file = fopen("csv_seat_reservations.csv", "w");
+
+    if (csv_file == NULL) {
+        printf("Error: Unable to open file for writing.\n");
+        return;
+    }
+
+    for (int i = 0; i < LINES; i++) {
+        fprintf(csv_file, "%s,%s,%d,%c\n",
+                passengers[i].firstn,
+                passengers[i].lastn,
+                passengers[i].row,
+                passengers[i].seat);
+    }
+
+    fclose(csv_file);
+    printf("File successfully updated.\n");
 }
 
+
+int compare_first(const void *a, const void *b) {
+    return strcmp(((aPassenger *)a)->firstn, ((aPassenger *)b)->firstn);
+}
+
+int compare_last(const void *a, const void *b) {
+    return strcmp(((aPassenger *)a)->lastn, ((aPassenger *)b)->lastn);
+}
+
+void sort_first(aPassenger *passengers) {
+    qsort(passengers, ROWS, sizeof(aPassenger), compare_first);
+}
+
+void sort_last(aPassenger *passengers) {
+    qsort(passengers, ROWS, sizeof(aPassenger), compare_last);
+}
+
+
+
+//
 //MAIN PROGRAM:
+//
+
 int main(){
     create_csv();
     bool ton = true;
@@ -181,19 +295,24 @@ int main(){
     while (ton){
         int select;
         int * selected = &select;
-        printf("Ohjeet valitsemiseen \n");
+        printf("Instructions how to use: \n"
+               "Choose '1' to Reserve a Seat\n"
+               "Choose '2' to Print Seatmap\n"
+               "Choose '3' to Print Passengers\n"
+               "Choose '4' to quit the program\n"
+               ":\n");
 
         switch (input_handling(selected, MAIN_OPTS)) {
         case 1:
-            printf("reserve seat case 1 valittu\n");
-            //reserve_seat();
+            printf("You chose to Reserve a Seat\n");
+            reserve_seat(passengers);
             break;
         case 2:
-            printf("print seatmap case 2 valittu\n");
+            printf("You chose to Print a Seatmap\n");
             print_seatmap(passengers);
             break;
         case 3:
-            printf("print passangers case 3 valittu\n");
+            printf("You chose to Print Passangers\n");
             print_passengers(passengers);
             break;
         case 4:
