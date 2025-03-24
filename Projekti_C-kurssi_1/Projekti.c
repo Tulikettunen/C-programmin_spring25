@@ -123,7 +123,6 @@ int input_handling(int *input, int range){
         }
         printf("Invalid user input, please read the instructions and try again \n");
     }
-    toupper(holder);
     *input = holder;
     return holder;
 }
@@ -131,13 +130,12 @@ int input_handling(int *input, int range){
 
 char cinput_handling(char *input) {
     char holder;
-    char wrongchr;
-    while( (scanf("%c%c", &holder, &wrongchr) != 2 ) || (toupper(holder) < 'A') || (toupper(holder) > 'B') || (wrongchr != '\n') ){
-        if (wrongchr != '\n') {
-            while(getchar() != '\n');
-        }
+    //char wrongchr;
+    while( (scanf("%c", &holder) ==0 ) || (toupper(holder) < 'A') || (toupper(holder) > 'B') ){
+        while(getchar() != '\n');
         printf("Invalid user input, please read the instructions and try again \n");
     }
+    toupper(holder);
     *input = holder;
     return holder;
 }
@@ -153,12 +151,15 @@ void print_passengers(aPassenger *passengers) {
         case 1:
             printf("case 1 valittu, lajitellaan etunimen mukaan\n");
             //sort_first(passengers);
-            for (int i = 0; i < LINES; i++)
-                printf("%s %s, row %d, seat %c\n",
-                       passengers[i].firstn,
-                       passengers[i].lastn,
-                       passengers[i].row,
-                       passengers[i].seat);
+            for (int i = 0; i < LINES; i++) {
+                if (strcmp(passengers[i].firstn, "free") != 0){     //Skips the free seats from printing
+                    printf("%s %s, row %d, seat %c\n",
+                           passengers[i].firstn,
+                           passengers[i].lastn,
+                           passengers[i].row,
+                           passengers[i].seat);
+                }
+            }
             printf("\n");
             break;
         case 2:
