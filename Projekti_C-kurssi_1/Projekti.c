@@ -117,6 +117,7 @@ void read_csv(aPassenger *passengers) {
 int input_handling(int *input, int range){
     int holder;
     char wrongchr;     // Tää tekee nyt sen pahuksen "bugin" korjauksen, jossa syöte "3dfgdr" hyväksytään, koska siinä on ensin 3. Jessss!! :D
+    //while( (scanf("%d", &holder) != 1 ) || (scanf("%d", &wrongchr) == 1) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
     while( (scanf("%d%c", &holder, &wrongchr) != 2 ) || (holder < 1) || (holder > range) || (wrongchr != '\n') ){
         if (wrongchr != '\n') {
             while(getchar() != '\n');
@@ -131,11 +132,12 @@ int input_handling(int *input, int range){
 char cinput_handling(char *input) {
     char holder;
     //char wrongchr;
-    while( (scanf("%c", &holder) ==0 ) || (toupper(holder) < 'A') || (toupper(holder) > 'B') ){
+    while( (scanf("%c", &holder) ==0 ) || (toupper(holder) < 'A') || (toupper(holder) > 'F') ){
         while(getchar() != '\n');
         printf("Invalid user input, please read the instructions and try again \n");
     }
-    toupper(holder);
+    while(getchar() != '\n');
+    holder = toupper(holder);
     *input = holder;
     return holder;
 }
@@ -166,11 +168,13 @@ void print_passengers(aPassenger *passengers) {
             printf("case 2 valittu, lajitellaan sukunimen mukaan\n");
             //sort_last(passengers);
             for (int i = 0; i < LINES; i++)
-                printf("%s %s, row %d, seat %c\n",
-                       passengers[i].lastn,
-                       passengers[i].firstn,
-                       passengers[i].row,
-                       passengers[i].seat);
+                if (strcmp(passengers[i].firstn, "free") != 0) {    //Skips the free seats from printing
+                    printf("%s %s, row %d, seat %c\n",
+                           passengers[i].lastn,
+                           passengers[i].firstn,
+                           passengers[i].row,
+                           passengers[i].seat);
+                }
             printf("\n");
             break;
         default:
@@ -221,23 +225,29 @@ void reserve_seat(aPassenger *passengers) {
     int * pmoreseats = &moreseats;
     bool ton = true;       //(TrueOrNot)
     while (ton) {
-        printf("choose the line you want your seat from (1-%d\n)", ROWS);
+        printf("choose the line you want your seat from (1-%d)\n", ROWS);
         input_handling(pchooserow, ROWS);
         printf("Choose a seat A-F:\n");
         cinput_handling(pchooseseat);
 
-        for (int i = 0; i < ROWS; i++) {    //Looking for the correct line
+        bool found = false;
+        for (int i = 0; i < LINES; i++) {    //Looking for the correct line
             if ( (passengers[i].row == chooserow) && (passengers[i].seat == chooseseat) ) {
+                found = true;
                 if (strcmp(passengers[i].firstn, "free") == 0){
                     printf("Seat is free. Please give us your name (Firstname,Lastname)\n");
-                    passengers[i].firstn[0] = scanf("%19[^,]");
-                    passengers[i].lastn[0] = scanf("%39[^\n]");
+                    scanf(" %19[^,], %39[^\n]", passengers[i].firstn, passengers[i].lastn);
                     while (getchar() != '\n');
+                    printf("Reservation added.\n");
                 }
                 else {
                     printf("Seat you wished for is taken, please pick another one,\n");
                 }
             }
+        }
+        // If no seat was found in the loop
+        if (!found) {
+            printf("No matching seat found. Please enter valid row and seat.\n");
         }
         printf("Do you wish to continue reservation? (1 if yes,2 if no)\n");
         if (input_handling(pmoreseats, 2) ==2) {
